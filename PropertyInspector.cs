@@ -154,7 +154,8 @@ public class AcPpPaletteSetClass
 }
 
 /// <summary>
-/// An instance of this interface is passed into the 
+/// An instance of this interface is passed into the handlers
+/// of events exposed by the EventManager
 /// </summary>
 [ComImport]
 [Guid("B2BB79F7-06BD-42FB-814F-EFD656C1698C")]
