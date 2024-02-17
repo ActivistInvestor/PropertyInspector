@@ -1,11 +1,7 @@
-﻿using Autodesk.AutoCAD.ActivistInvestor;
-using Autodesk.AutoCAD.ApplicationServices;
-using Autodesk.AutoCAD.EditorInput;
-using Autodesk.AutoCAD.Internal.PropertyInspector;
-using Autodesk.AutoCAD.Runtime;
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Autodesk.AutoCAD.Internal.PropertyInspector;
 
 namespace Autodesk.AutoCAD.ActivistInvestor
 {
@@ -252,39 +248,5 @@ public interface IAcPiPropertyIdentifier
 [Guid("8B049801-6BC7-46E5-AA22-95AEA239BE54")]
 public class AcPiPropertyIdentifierClass
 {
-}
-
-/// <summary>
-/// Example class showing how to handle property changed event
-/// </summary>
-
-public static class EventExamnple
-{
-
-   static bool enabled = false;
-
-   /// <summary>
-   /// IACPIEVENTS command toggles handling of PropertyChanged event
-   /// </summary>
-   
-   [CommandMethod(nameof(IAcPiEvents))]
-   public static void IAcPiEvents()
-   {
-      enabled ^= true;
-      if(enabled)
-         PropertyInspector.EventManager.propertyChanged -= PropertyInspector_propertyChanged;
-      else
-         PropertyInspector.EventManager.propertyChanged += PropertyInspector_propertyChanged;
-   }
-
-   private static void PropertyInspector_propertyChanged(object sender, PropertyInspectorEventArgs e)
-   {
-      Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
-      IAcPiPropertyIdentifier prop = e.Property as IAcPiPropertyIdentifier;
-      if(prop != null)
-      {
-         ed.WriteMessage($"\nProperty {prop.Name} changed to {prop.Value}");
-      }
-   }
 }
 
