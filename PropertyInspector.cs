@@ -1,4 +1,9 @@
-﻿using Autodesk.AutoCAD.Internal.PropertyInspector;
+﻿using Autodesk.AutoCAD.ActivistInvestor;
+using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.EditorInput;
+using Autodesk.AutoCAD.Internal.PropertyInspector;
+using Autodesk.AutoCAD.Runtime;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -8,6 +13,10 @@ namespace Autodesk.AutoCAD.ActivistInvestor
    {
       static IAcPpPaletteSet paletteSet = null;
 
+      /// <summary>
+      /// The properties PaletteSet
+      /// </summary>
+      
       public static IAcPpPaletteSet PaletteSet
       {
          get
@@ -17,6 +26,15 @@ namespace Autodesk.AutoCAD.ActivistInvestor
             return paletteSet;
          }
       }
+
+      /// <summary>
+      /// Gets/Sets the visibility of the Properties Palette.
+      /// 
+      /// Note: Showing or hiding a docked palette set will cause
+      /// any currently-executing command(s) to be cancelled.
+      /// For that reason, changing this property's value from a
+      /// running command is not recommended.
+      /// </summary>
 
       public static bool Visible
       {
@@ -31,6 +49,11 @@ namespace Autodesk.AutoCAD.ActivistInvestor
          }
       }
 
+      /// <summary>
+      /// The event manger that provides access to events
+      /// exposed by the IAcPpPaletteSet interface.
+      /// </summary>
+      
       public static PropertyInspectorEventManager EventManager
       {
          get
@@ -132,5 +155,136 @@ public interface IAcPpPaletteSet
 [TypeLibType(TypeLibTypeFlags.FCanCreate)]
 public class AcPpPaletteSetClass
 {
+}
+
+/// <summary>
+/// An instance of this interface is passed into the 
+/// </summary>
+[ComImport]
+[Guid("B2BB79F7-06BD-42FB-814F-EFD656C1698C")]
+[TypeLibType(4160)]
+public interface IAcPiPropertyIdentifier
+{
+   [DispId(1)]
+   string Name
+   {
+      [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+      [DispId(1)]
+      [return: MarshalAs(UnmanagedType.BStr)]
+      get;
+      [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+      [DispId(1)]
+      [param: In]
+      [param: MarshalAs(UnmanagedType.BStr)]
+      set;
+   }
+
+   [DispId(2)]
+   ushort Type
+   {
+      [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+      [DispId(2)]
+      get;
+      [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+      [DispId(2)]
+      [param: In]
+      set;
+   }
+
+   [DispId(3)]
+   Guid ControlCLSID
+   {
+      [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+      [DispId(3)]
+      get;
+      [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+      [DispId(3)]
+      [param: In]
+      set;
+   }
+
+   [DispId(4)]
+   object Value
+   {
+      [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+      [DispId(4)]
+      [return: MarshalAs(UnmanagedType.Struct)]
+      get;
+      [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+      [DispId(4)]
+      [param: In]
+      [param: MarshalAs(UnmanagedType.Struct)]
+      set;
+   }
+
+   [DispId(5)]
+   string Categories
+   {
+      [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+      [DispId(5)]
+      [return: MarshalAs(UnmanagedType.BStr)]
+      get;
+      [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+      [DispId(5)]
+      [param: In]
+      [param: MarshalAs(UnmanagedType.BStr)]
+      set;
+   }
+
+   [DispId(6)]
+   string ValueAsString
+   {
+      [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+      [DispId(6)]
+      [return: MarshalAs(UnmanagedType.BStr)]
+      get;
+      [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+      [DispId(6)]
+      [param: In]
+      [param: MarshalAs(UnmanagedType.BStr)]
+      set;
+   }
+}
+
+[ComImport]
+[ClassInterface(ClassInterfaceType.None)]
+[TypeLibType(2)]
+[Guid("8B049801-6BC7-46E5-AA22-95AEA239BE54")]
+public class AcPiPropertyIdentifierClass
+{
+}
+
+/// <summary>
+/// Example class showing how to handle property changed event
+/// </summary>
+
+public static class EventExamnple
+{
+
+   static bool enabled = false;
+
+   /// <summary>
+   /// IACPIEVENTS command toggles handling of PropertyChanged event
+   /// </summary>
+   
+   [CommandMethod(nameof(IAcPiEvents))]
+   public static void IAcPiEvents()
+   {
+      enabled ^= true;
+      if(enabled)
+         PropertyInspector.EventManager.propertyChanged -= PropertyInspector_propertyChanged;
+      else
+         PropertyInspector.EventManager.propertyChanged += PropertyInspector_propertyChanged;
+   }
+
+   private static void PropertyInspector_propertyChanged(object sender, PropertyInspectorEventArgs e)
+   {
+      Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+      IAcPiPropertyIdentifier prop = e.Property as IAcPiPropertyIdentifier;
+      if(prop != null)
+      {
+         ed.WriteMessage($"\nProperty {prop.Name} changed to {prop.Value}");
+      }
+   }
 }
 
