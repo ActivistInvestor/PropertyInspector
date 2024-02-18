@@ -3,6 +3,7 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Internal.PropertyInspector;
 using Autodesk.AutoCAD.Runtime;
+using System.Windows;
 using System.Windows.Input;
 
 /// <summary>
@@ -23,10 +24,11 @@ public static class EventExamnple
    public static void IAcPiEvents()
    {
       enabled ^= true;
+      var events = PropertyInspector.EventManager;
       if(enabled)
-         PropertyInspector.EventManager.propertyChanged += PropertyInspector_propertyChanged;
+         events.propertyChanged += PropertyInspector_propertyChanged;
       else
-         PropertyInspector.EventManager.propertyChanged -= PropertyInspector_propertyChanged;
+         events.propertyChanged -= PropertyInspector_propertyChanged;
    }
 
    private static void PropertyInspector_propertyChanged(object sender, PropertyInspectorEventArgs e)
