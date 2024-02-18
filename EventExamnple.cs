@@ -1,10 +1,7 @@
 ﻿using Autodesk.AutoCAD.ActivistInvestor;
 using Autodesk.AutoCAD.ApplicationServices;
-using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Internal.PropertyInspector;
 using Autodesk.AutoCAD.Runtime;
-using System.Windows;
-using System.Windows.Input;
 
 /// <summary>
 /// Example showing how to handle property changed event
