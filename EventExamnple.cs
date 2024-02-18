@@ -33,7 +33,7 @@ public static class EventExamnple
    {
       IAcPiPropertyIdentifier prop = e.Property as IAcPiPropertyIdentifier;
       if(prop != null)
-         Write($"\n<<Property {prop.Name} changed to {prop.Value}>>");
+         Write($"\n<<Property {prop.Name} changed to {prop.ValueAsString}>>");
    }
 
    static void Write(string msg, params object[] args)
