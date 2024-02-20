@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Autodesk.AutoCAD.Internal.PropertyInspector;
+// using Autodesk.AutoCAD.Internal.PropertyInspector;
 
-namespace Autodesk.AutoCAD.ActivistInvestor
+namespace Autodesk.AutoCAD.Internal.PropertyInspector
 {
    public static class PropertyInspector
    {
@@ -60,6 +60,7 @@ namespace Autodesk.AutoCAD.ActivistInvestor
    }
 
 }
+
 
 [ComImport]
 [Guid("A20A927F-5508-4624-9157-FD5CBE5B2D64")]
