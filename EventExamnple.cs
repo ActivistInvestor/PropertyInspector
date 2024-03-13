@@ -43,7 +43,7 @@ namespace PropertyInspectorExamples
       static void Write(string msg, params object[] args)
       {
          Document doc = Application.DocumentManager.MdiActiveDocument;
-         if(doc == null)
+         if(doc != null)
          {
             doc.Editor.WriteMessage(msg, args);
          }
